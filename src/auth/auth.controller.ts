@@ -18,6 +18,7 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
+  @HttpCode(HttpStatus.OK)
   async login(@Req() req: Request) {
     return await this.authService.login(req.user);
   }
