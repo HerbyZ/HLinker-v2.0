@@ -39,6 +39,13 @@ export class LinksService {
     return await this.linkModel.findOneAndDelete({ id });
   }
 
+  async followLink(shortUrl: string): Promise<string> {
+    const link = await this.linkModel.findOne({ shortUrl });
+    await link.updateOne({ followCount: link.followCount + 1 });
+
+    return link.originalUrl;
+  }
+
   private async generateShortUrl(): Promise<string> {
     function generate(): string {
       return (Math.random() + 1).toString(36).substring(7);

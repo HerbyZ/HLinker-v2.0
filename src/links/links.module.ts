@@ -12,5 +12,6 @@ import { UsersModule } from '../users/users.module';
   ],
   controllers: [LinksController],
   providers: [LinksService],
+  exports: [LinksService],
 })
 export class LinksModule {}
