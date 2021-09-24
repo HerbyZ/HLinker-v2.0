@@ -1,0 +1,82 @@
+@import '../../../variables.scss';
+
+#logoutModal {
+  position: relative;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: #00000080;
+}
+
+.modal-window {
+  margin: 0 auto;
+  margin-top: 12%;
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  width: 600px;
+  background-color: #fff;
+  z-index: 10000;
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 18px;
+    border-bottom: solid rgb(138, 138, 138) 1px;
+
+    .modal-title {
+      margin: 0;
+      font-size: large;
+    }
+
+    .modal-close-button {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .modal-content {
+    padding: 30px 40px;
+    height: max-content;
+  }
+}
+
+.modal-button {
+  border: none;
+  border-radius: 4px;
+  display: block;
+  padding: 1%;
+  font-size: large;
+  transition: 0.1s;
+  color: #fff;
+  width: 100%;
+}
+
+#logoutButton {
+  background-color: $danger-color;
+
+  &:hover {
+    background-color: darken($danger-color, 10%);
+  }
+}
+
+#stayButton {
+  margin-top: 5px;
+  background-color: $primary-color;
+
+  &:hover {
+    background-color: darken($primary-color, 10%);
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .logout-modal {
+    width: 20%;
+  }
+}
