@@ -2,3 +2,14 @@
 $primary-color: #1f68dd;
 $secondary-color: #808080;
 $danger-color: #cc0808;
+$link-color: #2281fd;
+
+@mixin colorize-button($color) {
+  background-color: $color;
+  color: #fff;
+  transition: filter 0.1s linear;
+
+  &:hover {
+    filter: brightness(1.2);
+  }
+}
