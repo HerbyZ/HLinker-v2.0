@@ -1,0 +1,26 @@
+.register-window {
+  width: 25%;
+  margin: 0 auto;
+
+  h1 {
+    text-align: center;
+  }
+}
+
+#signUpButton {
+  margin: 0 auto;
+  margin-top: 3%;
+  width: 60%;
+}
+
+@media screen and (max-width: 800px) {
+  .register-window {
+    width: 60%;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .register-window {
+    width: 80%;
+  }
+}
