@@ -7,7 +7,7 @@ export type LinkDocument = Link & Document;
 
 @Schema()
 export class Link {
-  @Prop()
+  @Prop({ required: true, minlength: 3 })
   name: string;
 
   @Prop({ required: true, validate: isURL })
