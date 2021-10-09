@@ -4,55 +4,42 @@ import { useHttp } from '../../hooks/http.hook';
 import './LoginPage.scss';
 
 export const LoginPage: React.FC = () => {
-  // State
-  type formDataType = { [key: string]: string };
-  const [formData, setFormData] = useState<formDataType>({
-    email: '',
-    password: '',
-  });
   const [formError, setFormError] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const { request, loading } = useHttp();
   const { login } = useContext(AuthContext);
 
-  const validateForm = (data: formDataType): void => {
-    const email = data['email'];
-    const password = data['password'];
-
+  const validateForm = (): string | void => {
     if (!email || !password) {
-      return setFormError('All fields are required');
+      return 'All fields are required';
     }
 
     const emailRegex =
       /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
 
     if (!emailRegex.test(email)) {
-      return setFormError('Incorrect email');
+      return 'Incorrect email';
     }
 
     if (password.length < 8) {
-      return setFormError('Password is too short');
+      return 'Password is too short';
     }
-
-    setFormError('');
-  };
-
-  const inputChangeHandler = ({
-    currentTarget,
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    const newData = formData;
-    newData[currentTarget.name] = currentTarget.value;
-
-    validateForm(newData);
-
-    setFormData(newData);
   };
 
   const signInHandler = async () => {
+    const error = validateForm();
+    if (error) {
+      return setFormError(error);
+    }
+
+    setFormError('');
+
     let response;
 
     try {
-      response = await request('auth/login', 'POST', formData);
+      response = await request('auth/login', 'POST', { email, password });
     } catch {
       return setFormError('Invalid email or password');
     }
@@ -76,7 +63,7 @@ export const LoginPage: React.FC = () => {
               id="emailInput"
               name="email"
               placeholder="example.email@domen.com"
-              onChange={inputChangeHandler}
+              onChange={(event) => setEmail(event.target.value)}
             />
           </div>
           <div className="form-field">
@@ -89,7 +76,7 @@ export const LoginPage: React.FC = () => {
               type="password"
               name="password"
               placeholder="Your password"
-              onChange={inputChangeHandler}
+              onChange={(event) => setPassword(event.target.value)}
             />
           </div>
           {formError && (
@@ -101,7 +88,7 @@ export const LoginPage: React.FC = () => {
             <button
               className="btn btn-primary btn-block"
               id="signInButton"
-              disabled={loading || !!formError || !formData}
+              disabled={loading}
               onClick={signInHandler}
             >
               Sign in!

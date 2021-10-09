@@ -4,62 +4,47 @@ import { useHttp } from '../../hooks/http.hook';
 import './RegisterPage.scss';
 
 export const RegisterPage: React.FC = () => {
-  // State
-  type formDataType = { [key: string]: string };
-  const [formData, setFormData] = useState<formDataType>({
-    email: '',
-    password: '',
-  });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [policyAccept, setPolicyAccept] = useState(false);
   const [formError, setFormError] = useState('');
 
   const { request, loading } = useHttp();
   const { login } = useContext(AuthContext);
 
-  const validateForm = (data: formDataType) => {
-    const email = data['email'];
-    const password = data['password'];
-
+  const validateForm = (): string | void => {
     if (!email || !password) {
-      return setFormError('All fields are required');
+      return 'All fields are required';
     }
 
     const emailRegex =
       /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
 
     if (!emailRegex.test(email)) {
-      return setFormError('Incorrect email');
+      return 'Incorrect email';
     }
 
     if (password.length < 8) {
-      return setFormError('Password is too short');
+      return 'Password is too short';
     }
 
-    setFormError('');
-  };
-
-  const changeHandler = ({
-    currentTarget,
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    const newForm = formData;
-    newForm[currentTarget.name] = currentTarget.value;
-
-    validateForm(newForm);
-
-    setFormData(newForm);
-  };
-
-  const checkboxHandler = ({
-    currentTarget,
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    setPolicyAccept(currentTarget.checked);
+    if (!policyAccept) {
+      return 'You should accept privacy policy';
+    }
   };
 
   const signUpHandler = async () => {
+    const error = validateForm();
+    if (error) {
+      return setFormError(error);
+    }
+
+    setFormError('');
+
     let response;
 
     try {
-      response = await request('auth/register', 'POST', formData);
+      response = await request('auth/register', 'POST', { email, password });
     } catch {
       return setFormError('Something went wrong or your data is incorrect');
     }
@@ -83,7 +68,7 @@ export const RegisterPage: React.FC = () => {
               className="form-control"
               name="email"
               id="emailInput"
-              onChange={changeHandler}
+              onChange={({ target }) => setEmail(target.value)}
             />
             <small className="text-secondary">
               We never share your data with somebody.
@@ -98,14 +83,14 @@ export const RegisterPage: React.FC = () => {
               className="form-control"
               name="password"
               id="passwordInput"
-              onChange={changeHandler}
+              onChange={({ target }) => setPassword(target.value)}
             />
           </div>
           <div className="form-field">
             <input
               type="checkbox"
               id="privacyPolicyCheckbox"
-              onChange={checkboxHandler}
+              onChange={({ target }) => setPolicyAccept(target.checked)}
             />
             <label htmlFor="privacyPolicyCheckbox">
               I accept the <a href="#privacyPolicy">privacy policy</a> of
@@ -121,7 +106,7 @@ export const RegisterPage: React.FC = () => {
             <button
               className="btn btn-primary btn-block"
               id="signUpButton"
-              disabled={!!formError || loading || !policyAccept || !formData}
+              disabled={loading}
               onClick={signUpHandler}
             >
               Sign up!
