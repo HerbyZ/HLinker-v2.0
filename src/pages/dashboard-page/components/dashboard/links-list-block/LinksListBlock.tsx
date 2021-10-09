@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLinks } from '../../../hooks/links.hook';
+import { useLinks } from '../../../../../hooks/links.hook';
 import { LinksListItem } from './links-list-item/LinksListItem';
 import './LinksListBlock.scss';
 

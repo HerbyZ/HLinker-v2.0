@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from '../../../../models/Link';
+import { Link } from '../../../../../../models/Link';
 import './LinksListItem.scss';
 
 type LinkDataProps = {
