@@ -1,0 +1,48 @@
+@import '/src/variables.scss';
+
+.dashboard__wrapper {
+  padding: 10px 220px;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-gap: 10px;
+}
+
+.dashboard-block {
+  background-color: #e7e7e7;
+  border: none;
+  border-radius: 5px;
+  padding: 4%;
+
+  &__header {
+    margin-top: 0;
+  }
+}
+
+.dashboard-block-outline {
+  background-color: #fff;
+  border: 5px solid #e7e7e7;
+  border-radius: 5px;
+  padding: 4%;
+}
+
+.create-link-block {
+  grid-column: 1 / 2;
+}
+
+.links-block {
+  min-height: 10%;
+
+  .links-page-hint {
+    color: $secondary-color;
+    float: right;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .dashboard__wrapper {
+    padding: 10px 30px;
+  }
+}

@@ -1,4 +1,5 @@
 import { Switch, Route } from 'react-router-dom';
+import { Dashboard } from './components/dashboard/Dashboard';
 import { LoginPage } from './components/login-page/LoginPage';
 import { RegisterPage } from './components/register-page/RegisterPage';
 
@@ -7,7 +8,7 @@ export const useRoutes = (isAuthenticated: boolean) => {
   if (isAuthenticated) {
     return (
       <Switch>
-        <Route exact path="/" component={() => <h1>Authenticated</h1>} />
+        <Route exact path="/" component={Dashboard} />
       </Switch>
     );
   } else {

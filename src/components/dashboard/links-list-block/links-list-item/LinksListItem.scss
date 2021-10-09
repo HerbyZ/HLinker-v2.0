@@ -1,0 +1,61 @@
+@import '../../../../variables.scss';
+
+$list-item-color: #d6d6d6;
+$list-item-color-hover: darken($list-item-color, 8%);
+
+.link-data {
+  padding: 5px;
+  margin-bottom: 2px;
+  border: none;
+  border-radius: 5px;
+  background-color: $list-item-color;
+  font-size: medium;
+  transition: background-color 0.2s linear;
+
+  &:hover {
+    background-color: $list-item-color-hover;
+  }
+
+  p,
+  h3 {
+    margin: 0.5%;
+  }
+
+  .link-action-buttons-block {
+    float: right;
+
+    .link-action-button {
+      margin-left: 3px;
+      color: $secondary-color;
+      font-size: medium;
+      border: 3px $secondary-color solid;
+      border-radius: 4px;
+      background-color: #ffffff00;
+      cursor: pointer;
+
+      transition: background-color 0.1s linear;
+      transition: color 0.1s linear;
+    }
+
+    .delete-button {
+      border-color: $danger-color;
+      color: $danger-color;
+
+      &:hover {
+        background-color: $danger-color;
+        color: #fff;
+      }
+    }
+
+    .copy-button {
+      &:hover {
+        background-color: #ffffff50;
+      }
+
+      &:focus {
+        border-color: $primary-color;
+        color: $primary-color;
+      }
+    }
+  }
+}
