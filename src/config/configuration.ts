@@ -4,12 +4,12 @@ enum Mode {
 }
 
 export default () => ({
-  mode: process.env.MODE as Mode,
+  mode: (process.env.MODE as Mode) || 'DEV',
   port: parseInt(process.env.PORT) || 3000,
   database: {
     uri: process.env.DATABASE_URI,
   },
   jwt: {
-    secret: process.env.JWT_SECRET,
+    secret: process.env.JWT_SECRET || 'jwtsecret',
   },
 });
