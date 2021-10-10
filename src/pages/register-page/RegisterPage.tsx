@@ -52,6 +52,8 @@ export const RegisterPage: React.FC = () => {
     const data = response.data;
 
     login(data.accessToken, data.userId);
+
+    window.location.href = '/';
   };
 
   return (
