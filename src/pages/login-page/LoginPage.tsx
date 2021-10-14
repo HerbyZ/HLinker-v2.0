@@ -30,17 +30,27 @@ export const LoginPage: React.FC = () => {
 
   const signInHandler = async () => {
     const error = validateForm();
-    setFormError(error || '');
+    if (error) {
+      return setFormError(error);
+    }
+
+    setFormError('');
 
     setLoading(true);
 
-    // TODO: LoginPage.signInHandler login request validation
-    await AuthService.login(email, password).then((data) => {
-      setLoading(false);
-      login(data.accessToken, data.userId);
-    });
+    await AuthService.login(email, password)
+      .catch((error) => {
+        setLoading(false);
+        setFormError(error.message);
+      })
+      .then((data) => {
+        if (data) {
+          setLoading(false);
+          login(data.accessToken, data.userId);
 
-    window.location.href = '/';
+          window.location.href = '/';
+        }
+      });
   };
 
   return (

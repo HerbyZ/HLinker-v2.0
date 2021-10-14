@@ -21,11 +21,11 @@ export const RegisterPage: React.FC = () => {
       /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
 
     if (!emailRegex.test(email)) {
-      return 'Incorrect email';
+      return 'Email must be an email';
     }
 
     if (password.length < 8) {
-      return 'Password is too short';
+      return 'Password must be longer than or equal to 8 characters';
     }
 
     if (!policyAccept) {
@@ -35,17 +35,27 @@ export const RegisterPage: React.FC = () => {
 
   const signUpHandler = async () => {
     const error = validateForm();
-    setFormError(error || '');
+    if (error) {
+      return setFormError(error);
+    }
+
+    setFormError('');
 
     setLoading(true);
 
-    // TODO: RegisterPage.signUpHandler register request validation
-    AuthService.register(email, password).then((data) => {
-      setLoading(false);
-      login(data.accessToken, data.userId);
-    });
+    AuthService.register(email, password)
+      .catch((error) => {
+        setLoading(false);
+        setFormError(error.message);
+      })
+      .then((data) => {
+        if (data) {
+          setLoading(false);
+          login(data.accessToken, data.userId);
 
-    window.location.href = '/';
+          window.location.href = '/';
+        }
+      });
   };
 
   return (
@@ -100,6 +110,7 @@ export const RegisterPage: React.FC = () => {
             <button
               className="btn btn-primary btn-block"
               id="signUpButton"
+              type="button"
               disabled={loading}
               onClick={signUpHandler}
             >
