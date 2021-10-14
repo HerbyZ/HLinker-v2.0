@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
-import { useHttp } from '../../hooks/http.hook';
+import { AuthService } from '../../services/auth.service';
 import './RegisterPage.scss';
 
 export const RegisterPage: React.FC = () => {
@@ -8,8 +8,8 @@ export const RegisterPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [policyAccept, setPolicyAccept] = useState(false);
   const [formError, setFormError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const { request, loading } = useHttp();
   const { login } = useContext(AuthContext);
 
   const validateForm = (): string | void => {
@@ -35,23 +35,15 @@ export const RegisterPage: React.FC = () => {
 
   const signUpHandler = async () => {
     const error = validateForm();
-    if (error) {
-      return setFormError(error);
-    }
+    setFormError(error || '');
 
-    setFormError('');
+    setLoading(true);
 
-    let response;
-
-    try {
-      response = await request('auth/register', 'POST', { email, password });
-    } catch {
-      return setFormError('Something went wrong or your data is incorrect');
-    }
-
-    const data = response.data;
-
-    login(data.accessToken, data.userId);
+    // TODO: RegisterPage.signUpHandler register request validation
+    AuthService.register(email, password).then((data) => {
+      setLoading(false);
+      login(data.accessToken, data.userId);
+    });
 
     window.location.href = '/';
   };

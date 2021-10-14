@@ -1,14 +1,14 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
-import { useHttp } from '../../hooks/http.hook';
+import { AuthService } from '../../services/auth.service';
 import './LoginPage.scss';
 
 export const LoginPage: React.FC = () => {
   const [formError, setFormError] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const { request, loading } = useHttp();
   const { login } = useContext(AuthContext);
 
   const validateForm = (): string | void => {
@@ -30,22 +30,15 @@ export const LoginPage: React.FC = () => {
 
   const signInHandler = async () => {
     const error = validateForm();
-    if (error) {
-      return setFormError(error);
-    }
+    setFormError(error || '');
 
-    setFormError('');
+    setLoading(true);
 
-    let response;
-
-    try {
-      response = await request('auth/login', 'POST', { email, password });
-    } catch {
-      return setFormError('Invalid email or password');
-    }
-
-    const data = response.data;
-    login(data.accessToken, data.userId);
+    // TODO: LoginPage.signInHandler login request validation
+    await AuthService.login(email, password).then((data) => {
+      setLoading(false);
+      login(data.accessToken, data.userId);
+    });
 
     window.location.href = '/';
   };
