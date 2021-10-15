@@ -10,6 +10,11 @@ type LogoutModalProps = {
 export const LogoutModal: React.FC<LogoutModalProps> = ({ closeHandler }) => {
   const { logout } = useContext(AuthContext);
 
+  const logoutHandler = () => {
+    logout();
+    window.location.href = '/';
+  };
+
   return (
     <div id="logoutModal">
       <div className="modal-overlay" onClick={closeHandler}>
@@ -27,7 +32,7 @@ export const LogoutModal: React.FC<LogoutModalProps> = ({ closeHandler }) => {
               <button
                 id="logoutButton"
                 className="modal-button"
-                onClick={logout}
+                onClick={logoutHandler}
               >
                 Logout
               </button>
