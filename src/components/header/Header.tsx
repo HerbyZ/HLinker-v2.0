@@ -25,10 +25,9 @@ export const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
 
   return (
     <header className="header">
-      <LogoutModal
-        isShown={logoutModalShown}
-        closeHandler={() => setLogoutModalShown(false)}
-      />
+      {logoutModalShown && (
+        <LogoutModal closeHandler={() => setLogoutModalShown(false)} />
+      )}
       <nav className="nav">
         <div className="main-nav">
           <h5 className="logo">
