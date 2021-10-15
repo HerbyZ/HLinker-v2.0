@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
+import { useTitle } from '../../hooks/title.hook';
 import { AuthService } from '../../services/auth.service';
 import './RegisterPage.scss';
 
@@ -11,6 +12,8 @@ export const RegisterPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const { login } = useContext(AuthContext);
+
+  useTitle('Sign up to HLinker');
 
   const validateForm = (): string | void => {
     if (!email || !password) {

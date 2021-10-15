@@ -1,7 +1,10 @@
 import React from 'react';
+import { useTitle } from '../../hooks/title.hook';
 import './HomePage.scss';
 
 export const HomePage: React.FC = () => {
+  useTitle('HLinker');
+
   return (
     <div className="home-page">
       <div className="container">
