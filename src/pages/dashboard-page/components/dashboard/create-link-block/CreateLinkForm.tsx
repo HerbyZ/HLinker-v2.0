@@ -1,18 +1,17 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../../../../context/AuthContext';
-import { useHttp } from '../../../../../hooks/http.hook';
 import { useLinks } from '../../../../../hooks/links.hook';
-import { LinkFactory } from '../../../../../models/Link';
+import { LinksService } from '../../../../../services/links.service';
 import './CreateLinkForm.scss';
 
 export const CreateLinkForm: React.FC = () => {
+  const [loading, setLoading] = useState(false);
   const [linkName, setLinkName] = useState('');
   const [url, setUrl] = useState('');
   const [formError, setFormError] = useState('');
   const [newShortLink, setNewShortLink] = useState('');
 
   const { accessToken, userId } = useContext(AuthContext);
-  const { request, loading } = useHttp();
   const { updateLinks } = useLinks();
 
   const validateForm = (): string | void => {
@@ -61,20 +60,16 @@ export const CreateLinkForm: React.FC = () => {
 
     setFormError('');
 
-    let response;
+    const link = await LinksService.create(linkName, url, userId, accessToken)
+      .catch(() => {
+        setFormError('Something went wrong, try again later');
+      })
+      .then((data) => {
+        setLoading(false);
+        return data;
+      });
 
-    try {
-      response = await request(
-        'links',
-        'POST',
-        { name: linkName, originalUrl: url, owner: userId },
-        { Authorization: `Bearer ${accessToken}` }
-      );
-    } catch {
-      return setFormError('Something went wrong, try again later');
-    }
-
-    const link = LinkFactory.createFromBackendData(response.data);
+    if (!link) return;
 
     setNewShortLink(link.shortUrl);
 

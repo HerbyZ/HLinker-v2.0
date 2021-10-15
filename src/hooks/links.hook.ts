@@ -1,32 +1,22 @@
 import { useState, useContext, useCallback, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { Link, LinkBackendData, LinkFactory } from '../models/Link';
-import { useHttp } from './http.hook';
+import { Link } from '../models/Link';
+import { LinksService } from '../services/links.service';
 
 export const useLinks = (refreshTime: number = 5000) => {
   const [links, setLinks] = useState<Link[]>([]);
-  const { request } = useHttp();
   const { accessToken, userId } = useContext(AuthContext);
 
   const updateLinks = useCallback(async () => {
     try {
-      const response = await request(
-        'links',
-        'GET',
-        { owner: userId },
-        { Authorization: `Bearer ${accessToken}` }
-      );
-
-      const links: Link[] = response.data.map((el: LinkBackendData) =>
-        LinkFactory.createFromBackendData(el)
-      );
+      const links = await LinksService.getLinksByOwnerId(userId, accessToken);
 
       setLinks(links);
     } catch (e) {
       // TODO: Error handling
       throw e;
     }
-  }, [accessToken, userId, request]);
+  }, [accessToken, userId]);
 
   // Reloads links every 5000 ms by default
   useEffect(() => {
